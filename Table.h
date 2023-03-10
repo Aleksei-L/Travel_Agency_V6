@@ -3,9 +3,9 @@
 
 class Table {
 private:
-	int size; // Размер таблицы
-	T* m; // Таблица клиентов
-	T* current; // Указатель на первый свободный в таблице
+	int size; // Р Р°Р·РјРµСЂ С‚Р°Р±Р»РёС†С‹
+	T* m; // РўР°Р±Р»РёС†Р° РєР»РёРµРЅС‚РѕРІ
+	T* current; // РЈРєР°Р·Р°С‚РµР»СЊ РЅР° РїРµСЂРІС‹Р№ СЃРІРѕР±РѕРґРЅС‹Р№ РІ С‚Р°Р±Р»РёС†Рµ
 public:
 	Table(int s);
 	~Table();
@@ -25,7 +25,7 @@ public:
 	int Remove(const T& badClient);
 	T* GetPntr(int i);
 	int Describe(T* pntr);
-	// Индивидуальные функции
+	// РРЅРґРёРІРёРґСѓР°Р»СЊРЅС‹Рµ С„СѓРЅРєС†РёРё
 	T* Insert(T* pos, T* first_item, T* last_item);
 	int Remove(T* first, T* last, T* first_item, T* last_item);
 	T* Search(T* first, T* last, T* first_item, T* last_item);

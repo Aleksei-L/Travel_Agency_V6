@@ -3,10 +3,10 @@
 
 class Client {
 private:
-	char* name; // Имя клиента
-	char city[30]; // Адрес клиента
-	int phone; // Телефон клиента
-	double age; // Возраст клиента
+	char* name; // РРјСЏ РєР»РёРµРЅС‚Р°
+	char city[30]; // РђРґСЂРµСЃ РєР»РёРµРЅС‚Р°
+	int phone; // РўРµР»РµС„РѕРЅ РєР»РёРµРЅС‚Р°
+	double age; // Р’РѕР·СЂР°СЃС‚ РєР»РёРµРЅС‚Р°
 public:
 	Client();
 	Client(const char* n, const char* c, int p, int a);
@@ -20,4 +20,4 @@ public:
 	Client* copy();
 };
 
-typedef Client* T; // Теперь таблица работает с абстрактным типом T
+typedef Client* T; // РўРµРїРµСЂСЊ С‚Р°Р±Р»РёС†Р° СЂР°Р±РѕС‚Р°РµС‚ СЃ Р°Р±СЃС‚СЂР°РєС‚РЅС‹Рј С‚РёРїРѕРј T
