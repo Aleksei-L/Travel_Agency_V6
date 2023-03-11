@@ -70,14 +70,19 @@ int MyString::equal(const MyString& t) {
 int MyString::input() {
 	if (std::cin.eof())
 		return 0;
-	char buf1[256];
-	std::cin.getline(buf1, 254, '\n');
-	if (strlen(buf1) == 0)
-		std::cin.getline(buf1, 254, '\n');
-	s = new char[strlen(buf1) + 1];
-	len = strlen(buf1);
+
+	char buf[MAX_SIZE];
+
+	std::cin.getline(buf, MAX_SIZE - 2, '\n');
+	if (strlen(buf) == 0)
+		std::cin.getline(buf, MAX_SIZE - 2, '\n');
+
+	s = new char[strlen(buf) + 1];
+
+	len = strlen(buf) + 1;
 	*s = '\0';
-	strcpy_s(s, strlen(buf1) + 1, buf1);
+	strcpy_s(s, strlen(buf) + 1, buf);
+	cur = &s[strlen(buf) + 1];
 	return 0;
 }
 
@@ -92,13 +97,16 @@ int MyString::output() {
 // Начало новых функций
 
 // Изменение размера строки
-//void MyString::resize(int newsize) {
-//	char* new_s = new char[newsize];
-//	strcpy_s(new_s, strlen(s) + 1, s);
-//	delete[] s;
-//	s = new_s;
-//	cur = &s[strlen(s)];
-//}
+void MyString::resize(int newsize) {
+	/*
+	В newsize передаётся новый размер, а не то на сколько его надо увеличить
+	*/
+	char* new_s = new char[newsize];
+	strcpy_s(new_s, strlen(s) + 1, s);
+	delete[] s;
+	s = new_s;
+	cur = &s[strlen(s)];
+}
 
 // Вставка строки на позицию
 int MyString::insert(int pos, const MyString& item) {
@@ -141,10 +149,3 @@ int MyString::insert(int pos, const MyString& item) {
 
 	return 0; //PRB что должна возвращать эта функция?
 }
-
-// Соединение двух строк
-//MyString MyString::concate(const MyString& s1, const MyString& s2) {
-//	MyString my(s1);
-//	//my.assign(s2);
-//	return my;
-//}

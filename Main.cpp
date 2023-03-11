@@ -146,16 +146,13 @@
 #include "MyString.h"
 
 int main() {
-	char* one = new char[4];
-	char* two = new char[4];
+	MyString str1, str2;
 
-	std::cin.getline(one, 4, '\n');
-	MyString str1(one);
+	str1.input();
 
-	std::cin.getline(two, 4, '\n');
-	MyString str2(two);
+	str1.resize(64);
 
-	str1.insert(3, str2);
+	str1.input();
 
 	str1.output();
 

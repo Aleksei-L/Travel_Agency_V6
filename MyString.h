@@ -22,7 +22,6 @@ public:
 	int input();
 	int output();
 	// Начало новых функций
-	//void resize(int newsize);
+	void resize(int newsize);
 	int insert(int pos, const MyString& item);
-	//static MyString concate(const MyString& s1, const MyString& s2);
 };
