@@ -14,14 +14,16 @@ public:
 	~MyString();
 	int length() { return len; }
 	int length() const { return len; }
-	char& item(int);
+	char& item(int i);
 	MyString* copy();
-	void assign(const MyString&);
-	int cmp(const MyString&);
-	int equal(const MyString&);
+	void assign(const MyString& t);
+	int cmp(const MyString& t);
+	int equal(const MyString& t);
 	int input();
 	int output();
 	// Начало новых функций
 	void resize(int newsize);
+	int realSize() const;
 	int insert(int pos, const MyString& item);
+	static MyString concate(const MyString& s1, const MyString& s2);
 };

@@ -41,7 +41,7 @@ char& MyString::item(int i) {
 	if (i < len && i >= 0)
 		return s[i];
 	else
-		std::cout << "Error";
+		std::cout << "Error" << std::endl;
 	return err;
 }
 
@@ -51,11 +51,12 @@ MyString* MyString::copy() {
 }
 
 // Замена перегруженного оператора =
-void MyString::assign(const MyString& u) {
-	s = new char[u.len + 1];
+void MyString::assign(const MyString& t) {
+	s = new char[t.len + 1];
 	*s = '\0';
-	strcpy_s(s, strlen(u.s) + 1, u.s);
-	len = u.len;
+	strcpy_s(s, strlen(t.s) + 1, t.s);
+	cur = &s[strlen(t.s)];
+	len = t.len;
 }
 
 // Сравнение двух строк
@@ -79,12 +80,12 @@ int MyString::input() {
 	if (strlen(buf) == 0)
 		std::cin.getline(buf, MAX_SIZE - 2, '\n');
 
-	s = new char[strlen(buf) + 1];
+	s = new char[MAX_SIZE + strlen(buf)];
 
-	len = strlen(buf) + 1;
+	len = MAX_SIZE + strlen(buf);
 	*s = '\0';
 	strcpy_s(s, strlen(buf) + 1, buf);
-	cur = &s[strlen(buf) + 1];
+	cur = &s[strlen(buf)];
 	return 0;
 }
 
@@ -110,6 +111,15 @@ void MyString::resize(int newsize) {
 	cur = &s[strlen(s)];
 }
 
+//PRB можно ли добавлять свои методы?
+// Возвращает истинный размер строки без учёта '\0'
+int MyString::realSize() const {
+	int count = 0;
+	for (char* i = s; i != cur; i++)
+		count++;
+	return count;
+}
+
 // Вставка строки на позицию
 int MyString::insert(int pos, const MyString& item) {
 	/*
@@ -130,7 +140,6 @@ int MyString::insert(int pos, const MyString& item) {
 	for (int i = 0; i < pos - 1; i++)
 		newString[i] = s[i];
 
-
 	// Копирование новой строки
 	int count = 0;
 	for (int i = pos - 1; item.s[i - pos + 1] != '\0'; i++) {
@@ -139,15 +148,25 @@ int MyString::insert(int pos, const MyString& item) {
 	}
 
 	// Копирование элементов после позици вставки
-	for (int i = pos - 1 + count; i < len + count; i++)
+	for (int i = pos - 1 + count; i < realSize() + count; i++)
 		newString[i] = s[i - count];
 
+	//TODO переделать на нормальный вид
+	int len1 = realSize();
+	int len2 = item.realSize();
 
+	len = len + item.len + 1;
 	delete[] s;
 	s = newString;
-	len = len + item.len + 1;
-	cur = s + len - 1;
+	cur = s + len1 + len2;
 	*cur = '\0';
 
 	return 0; //PRB что должна возвращать эта функция?
+}
+
+// Соединение двух строк
+MyString MyString::concate(const MyString& s1, const MyString& s2) {
+	MyString my(s1);
+	my.insert(s1.realSize() + 1, s2);
+	return my;
 }

@@ -149,12 +149,9 @@ int main() {
 	MyString str1, str2;
 
 	str1.input();
+	str2.input();
 
-	str1.resize(64);
-
-	str1.input();
-
-	str1.output();
+	MyString::concate(str1, str2).output();
 
 	return 0;
 }
