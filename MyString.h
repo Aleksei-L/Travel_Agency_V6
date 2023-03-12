@@ -9,8 +9,8 @@ private:
 	int len; // Длина строки
 public:
 	MyString();
-	MyString(const MyString&);
-	MyString(char*);
+	MyString(const MyString& t);
+	MyString(char* t);
 	~MyString();
 	int length() { return len; }
 	int length() const { return len; }

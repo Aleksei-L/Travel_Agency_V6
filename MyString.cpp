@@ -14,18 +14,20 @@ MyString::MyString() {
 
 // Конструктор от строки
 MyString::MyString(char* t) {
-	s = new char[strlen(t) + 1];
+	s = new char[MAX_SIZE + strlen(t)];
 	*s = '\0';
 	strcpy_s(s, strlen(t) + 1, t);
-	len = strlen(t);
+	cur = &s[strlen(t)];
+	len = MAX_SIZE + strlen(t);
 }
 
 // Конструктор копирования
-MyString::MyString(const MyString& u) {
-	s = new char[u.len + 1];
+MyString::MyString(const MyString& t) {
+	s = new char[MAX_SIZE + t.len];
 	*s = '\0';
-	strcpy_s(s, strlen(u.s) + 1, u.s);
-	len = u.len;
+	strcpy_s(s, strlen(t.s) + 1, t.s);
+	cur = &s[strlen(t.s)];
+	len = MAX_SIZE + t.len;
 }
 
 // Деструктор
