@@ -102,7 +102,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
@@ -129,11 +129,13 @@
   <ItemGroup>
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MyDate.cpp" />
     <ClCompile Include="MyString.cpp" />
     <ClCompile Include="Table.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h" />
+    <ClInclude Include="MyDate.h" />
     <ClInclude Include="MyString.h" />
     <ClInclude Include="Table.h" />
   </ItemGroup>

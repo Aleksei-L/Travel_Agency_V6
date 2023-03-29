@@ -144,14 +144,40 @@
 //}
 
 #include "MyString.h"
+#include "MyDate.h"
 
 int main() {
-	MyString str1, str2;
-
+	/*MyString str1;
+	int counter = 0;
 	str1.input();
-	str2.input();
 
-	MyString::concate(str1, str2).output();
+	str1.output();
+
+	str1.split(counter);*/
+
+	/*char* n = new char[11];
+	n[0] = '1';
+	n[1] = '5';
+	n[2] = '.';
+	n[3] = '0';
+	n[4] = '9';
+	n[5] = '.';
+	n[6] = '2';
+	n[7] = '0';
+	n[8] = '2';
+	n[9] = '3';
+	n[10] = '\0';
+
+	MyDate date(n);
+
+	date.output();*/
+
+
+	MyDate i;
+
+	i.input();
+	i.output();
+
 
 	return 0;
 }

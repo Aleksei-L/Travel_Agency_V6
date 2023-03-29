@@ -111,13 +111,47 @@ void MyString::resize(int newsize) {
 	cur = &s[strlen(s)];
 }
 
-//PRB можно ли добавлять свои методы?
 // Возвращает истинный размер строки без учёта '\0'
 int MyString::realSize() const {
 	int count = 0;
 	for (char* i = s; i != cur; i++)
 		count++;
 	return count;
+}
+
+// Удаление символов из строки
+int MyString::erase(int pos, int count) {
+	/*
+	pos - отражает ЧЕЛОВЕЧЕСКИЙ номер
+	pos = 1 -> удаление начиная с первого символа, включая первый символ
+	pos = len -> удаление начиная с последнего символа, включая последний символ
+	pos = len + 1 -> недопустимо
+	count - число символов, которое будет стёрто
+	*/
+
+	// Проверка pos на правильность
+	if (pos <= 0 || pos > realSize()) {
+		std::cout << "Error in erase function, class MyString" << std::endl;
+		return -1;
+	}
+
+	// Проверка count на правильность
+	if (count < 0 || count > realSize()) {
+		std::cout << "Error in erase function, class MyString" << std::endl;
+		return -1;
+	}
+
+	char sym = s[pos - 1];
+	int shift = 0;
+	while (sym != '\0') {
+		s[pos - 1 + shift] = s[pos - 1 + count + shift];
+		shift++;
+		sym = s[pos - 1 + shift];
+	}
+
+	cur -= count;
+
+	return 0;
 }
 
 // Вставка строки на позицию
@@ -128,6 +162,7 @@ int MyString::insert(int pos, const MyString& item) {
 	pos = len -> вставка на предпоследнюю позицию строки, только последний символ сдвигается вправо
 	pos = len + 1 -> вставка в самый конец строки, ничего не сдвигается
 	*/
+
 	// Проверка pos на правильность
 	if (pos <= 0 || pos > len + 1) {
 		std::cout << "Error in insert function, class MyString" << std::endl;

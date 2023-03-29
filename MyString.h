@@ -7,6 +7,7 @@ private:
 	char* s; // Указатель на строку
 	char* cur; // Указатель на первый свободный элемент
 	int len; // Длина строки
+	int realSize() const;
 public:
 	MyString();
 	MyString(const MyString& t);
@@ -23,7 +24,7 @@ public:
 	int output();
 	// Начало новых функций
 	void resize(int newsize);
-	int realSize() const;
+	int erase(int pos, int count);
 	int insert(int pos, const MyString& item);
 	static MyString concate(const MyString& s1, const MyString& s2);
 };
