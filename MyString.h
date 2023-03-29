@@ -13,8 +13,8 @@ public:
 	MyString(const MyString& t);
 	MyString(char* t);
 	~MyString();
-	int length() { return len; }
-	int length() const { return len; }
+	int length();
+	int length() const;
 	char& item(int i);
 	MyString* copy();
 	void assign(const MyString& t);
@@ -24,7 +24,9 @@ public:
 	int output();
 	// Начало новых функций
 	void resize(int newsize);
+	int find(int first, int last, const MyString& item);
 	int erase(int pos, int count);
 	int insert(int pos, const MyString& item);
+	int remove(int first, int last, const MyString& item);
 	static MyString concate(const MyString& s1, const MyString& s2);
 };

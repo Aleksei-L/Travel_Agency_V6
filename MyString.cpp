@@ -35,6 +35,16 @@ MyString::~MyString() {
 	delete[] s;
 }
 
+// Возвращает длину массива выделенного под строку
+int MyString::length() {
+	return len;
+}
+
+// Возвращает длину массива выделенного под строку
+int MyString::length() const {
+	return len;
+}
+
 // Получение i-того символа строки
 char& MyString::item(int i) {
 	char err = 'e';
@@ -119,6 +129,37 @@ int MyString::realSize() const {
 	return count;
 }
 
+// Поиск подстроки в строке
+int MyString::find(int first, int last, const MyString& item) {
+	/*
+	fisrt, last - отражают ЧЕЛОВЕЧЕСКИЙ номер
+	Ищет с позиции first по позицию last включительно
+	*/
+
+	// Проверка first и last на правильность, а строки-аргумента на существование
+	if (first <= 0 || first > realSize() || last <= 0 || last > realSize() || first > last || item.realSize() == 0) {
+		std::cout << "Error in find function, class MyString" << std::endl;
+		return -2;
+	}
+
+	for (int i = first - 1; i < last; i++) {
+		if (s[i] == item.s[0]) {
+			bool flag = false;
+			for (int j = i; j < item.realSize() + i; j++) {
+				if (j > last - 1) {
+					flag = true;
+					break;
+				}
+				if (s[j] != item.s[j - i])
+					flag = true;
+			}
+			if (!flag)
+				return i;
+		}
+	}
+	return -1;
+}
+
 // Удаление символов из строки
 int MyString::erase(int pos, int count) {
 	/*
@@ -196,7 +237,34 @@ int MyString::insert(int pos, const MyString& item) {
 	cur = s + len1 + len2;
 	*cur = '\0';
 
-	return 0; //PRB что должна возвращать эта функция?
+	return 0;
+}
+
+// Удаление подстроки из строки
+int MyString::remove(int first, int last, const MyString& item) {
+	/*
+	fisrt, last - отражают ЧЕЛОВЕЧЕСКИЙ номер
+	Ищет с позиции first по позицию last включительно
+	*/
+
+	// Проверка first и last на правильность, а строки-аргумента на существование
+	if (first <= 0 || first > realSize() || last <= 0 || last > realSize() || first > last || item.realSize() == 0) {
+		std::cout << "Error in remove function, class MyString" << std::endl;
+		return -1;
+	}
+
+	int index = find(first, last, item);
+
+	if (index != -1) {
+		int oldSize = realSize();
+		for (int i = 0; i < item.realSize(); i++) {
+			for (int j = first - 1; s[j] != '\0'; j++)
+				s[j] = s[j + 1];
+			cur--;
+		}
+	}
+
+	return 0;
 }
 
 // Соединение двух строк

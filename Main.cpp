@@ -147,37 +147,13 @@
 #include "MyDate.h"
 
 int main() {
-	/*MyString str1;
-	int counter = 0;
+	MyString str1, str2;
+
 	str1.input();
+	str2.input();
 
+	std::cout << "rem: " << str1.remove(1, 4, str2) << std::endl;
 	str1.output();
-
-	str1.split(counter);*/
-
-	/*char* n = new char[11];
-	n[0] = '1';
-	n[1] = '5';
-	n[2] = '.';
-	n[3] = '0';
-	n[4] = '9';
-	n[5] = '.';
-	n[6] = '2';
-	n[7] = '0';
-	n[8] = '2';
-	n[9] = '3';
-	n[10] = '\0';
-
-	MyDate date(n);
-
-	date.output();*/
-
-
-	MyDate i;
-
-	i.input();
-	i.output();
-
 
 	return 0;
 }
