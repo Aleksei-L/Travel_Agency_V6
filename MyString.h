@@ -25,8 +25,11 @@ public:
 	// Начало новых функций
 	void resize(int newsize);
 	int find(int first, int last, const MyString& item);
+	MyString substring(int pos, int count);
 	int erase(int pos, int count);
 	int insert(int pos, const MyString& item);
 	int remove(int first, int last, const MyString& item);
+	int replace(int first, int last, const MyString& oldString, const MyString& newString);
 	static MyString concate(const MyString& s1, const MyString& s2);
+	static MyString concate(MyString* arr, int count);
 };

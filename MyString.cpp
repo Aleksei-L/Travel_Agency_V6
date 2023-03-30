@@ -160,6 +160,37 @@ int MyString::find(int first, int last, const MyString& item) {
 	return -1;
 }
 
+// Формирование подстроки из строки
+MyString MyString::substring(int pos, int count) {
+	/*
+	pos - отражает ЧЕЛОВЕЧЕСКИЙ номер
+	count - сколько символов должно входить в подстроку
+	pos = 1 -> формирование с первой позиции строки
+	pos = len -> формирование подстроки из одного последнего элемента
+	pos = len + 1 -> недопустимо
+	*/
+
+	MyString newString;
+	char* buf = new char[5256];
+
+	// Проверка pos и count на правильность
+	if (pos <= 0 || pos > realSize() /*|| count > realSize() - pos - 1*/) {
+		std::cout << "Error in substring function, class MyString" << std::endl;
+		return newString; // Возврат пустой строки
+	}
+
+	int index = 0;
+	for (int i = pos - 1; i < pos - 1 + count; i++) {
+		buf[index] = s[i];
+		index++;
+	}
+	buf[index] = '\0';
+
+	MyString newString2(buf);
+
+	return newString2;
+}
+
 // Удаление символов из строки
 int MyString::erase(int pos, int count) {
 	/*
@@ -244,7 +275,7 @@ int MyString::insert(int pos, const MyString& item) {
 int MyString::remove(int first, int last, const MyString& item) {
 	/*
 	fisrt, last - отражают ЧЕЛОВЕЧЕСКИЙ номер
-	Ищет с позиции first по позицию last включительно
+	Ищет для удаления с позиции first по позицию last включительно
 	*/
 
 	// Проверка first и last на правильность, а строки-аргумента на существование
@@ -258,10 +289,33 @@ int MyString::remove(int first, int last, const MyString& item) {
 	if (index != -1) {
 		int oldSize = realSize();
 		for (int i = 0; i < item.realSize(); i++) {
-			for (int j = first - 1; s[j] != '\0'; j++)
+			for (int j = index; s[j] != '\0'; j++)
 				s[j] = s[j + 1];
 			cur--;
 		}
+	}
+
+	return 0;
+}
+
+// Замена подстроки в строке на другую подстроку
+int MyString::replace(int first, int last, const MyString& oldString, const MyString& newString) {
+	/*
+	fisrt, last - отражают ЧЕЛОВЕЧЕСКИЙ номер
+	Ищет для замены с позиции first по позицию last включительно
+	*/
+
+	// Проверка first и last на правильность, а строки-аргумента на существование
+	if (first <= 0 || first > realSize() || last <= 0 || last > realSize() || first > last || oldString.realSize() == 0 || newString.realSize() == 0) {
+		std::cout << "Error in replace function, class MyString" << std::endl;
+		return -1;
+	}
+
+	int index = find(first, last, oldString);
+
+	if (index != -1) {
+		remove(first, last, oldString);
+		insert(index + 1, newString);
 	}
 
 	return 0;
@@ -272,4 +326,14 @@ MyString MyString::concate(const MyString& s1, const MyString& s2) {
 	MyString my(s1);
 	my.insert(s1.realSize() + 1, s2);
 	return my;
+}
+
+// Соединение массива строк
+MyString MyString::concate(MyString* arr, int count) {
+	MyString res;
+
+	for (int i = 0; i < count; i++)
+		res.insert(res.realSize() + 1, arr[i]);
+
+	return res;
 }

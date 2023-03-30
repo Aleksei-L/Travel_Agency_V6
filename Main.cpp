@@ -147,13 +147,19 @@
 #include "MyDate.h"
 
 int main() {
-	MyString str1, str2;
-
+	MyString str1, str2, str3;
 	str1.input();
 	str2.input();
+	str3.input();
+	MyString* arr = new MyString[3];
 
-	std::cout << "rem: " << str1.remove(1, 4, str2) << std::endl;
-	str1.output();
+	arr[0] = str1;
+	arr[1] = str2;
+	arr[2] = str3;
+
+	MyString str4 = MyString::concate(arr, 3);
+
+	str4.output();
 
 	return 0;
 }
