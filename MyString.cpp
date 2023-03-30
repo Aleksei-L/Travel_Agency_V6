@@ -1,5 +1,5 @@
 #include "MyString.h"
-#define MAX_SIZE 32 //256
+#define MAX_SIZE 256
 
 // Конструктор по умолчанию
 MyString::MyString() {
@@ -321,6 +321,85 @@ int MyString::replace(int first, int last, const MyString& oldString, const MySt
 	return 0;
 }
 
+// Разбивает строку на массив слов
+MyString* MyString::split(int& count, char c) {
+	count = 0;
+	for (int i = 0; s[i] != '\0'; i++) {
+		if (s[i] == c)
+			count++;
+	}
+	count++;
+
+	MyString* arr = new MyString[count];
+	int index = 0, arrIndex = 0;
+
+	for (int i = 0; i < count; i++) {
+		MyString temp;
+		for (int j = index; s[j] != c && s[j] != '\0'; j++) {
+			char* t = new char[2];
+			t[0] = s[j];
+			t[1] = '\0';
+			MyString myChar(t);
+			temp.insert(temp.realSize() + 1, myChar);
+			delete[] t;
+			index = j;
+		}
+		index += 2;
+		arr[arrIndex].assign(temp);
+		arrIndex++;
+	}
+
+	return arr;
+}
+
+// Разбивает строку на массив слов используя строку символов-разделителей
+MyString* MyString::split(const MyString& splits, int& count) {
+	int splitsSize = splits.realSize();
+
+	// Проверка на существование строки с разделителями
+	if (splitsSize == 0) {
+		std::cout << "Error in split function, class MyString" << std::endl;
+		return NULL;
+	}
+
+	MyString copy(*this);
+	for (int i = 0; i < splitsSize; i++) {
+		for (int j = 0; j < copy.realSize(); j++) {
+			if (copy.s[j] == splits.s[i]) {
+				copy.s[j] = ' ';
+			}
+		}
+	}
+
+	count = 0;
+	for (int i = 0; copy.s[i] != '\0'; i++) {
+		if (copy.s[i] == ' ')
+			count++;
+	}
+	count++;
+
+	MyString* arr = new MyString[count];
+	int index = 0, arrIndex = 0;
+
+	for (int i = 0; i < count; i++) {
+		MyString temp;
+		for (int j = index; copy.s[j] != ' ' && copy.s[j] != '\0'; j++) {
+			char* t = new char[2];
+			t[0] = copy.s[j];
+			t[1] = '\0';
+			MyString myChar(t);
+			temp.insert(temp.realSize() + 1, myChar);
+			delete[] t;
+			index = j;
+		}
+		index += 2;
+		arr[arrIndex].assign(temp);
+		arrIndex++;
+	}
+
+	return arr;
+}
+
 // Соединение двух строк
 MyString MyString::concate(const MyString& s1, const MyString& s2) {
 	MyString my(s1);
@@ -334,6 +413,21 @@ MyString MyString::concate(MyString* arr, int count) {
 
 	for (int i = 0; i < count; i++)
 		res.insert(res.realSize() + 1, arr[i]);
+
+	return res;
+}
+
+// Соединение массива строк со вставкой символа разделителя
+MyString MyString::join(MyString* arr, int count, char c) {
+	char* spl = new char[2];
+	spl[0] = c;
+	spl[1] = '\0';
+	MyString res, split(spl);
+
+	for (int i = 0; i < count; i++) {
+		res.insert(res.realSize() + 1, arr[i]);
+		res.insert(res.realSize() + 1, split);
+	}
 
 	return res;
 }

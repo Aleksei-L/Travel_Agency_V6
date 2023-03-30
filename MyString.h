@@ -30,6 +30,9 @@ public:
 	int insert(int pos, const MyString& item);
 	int remove(int first, int last, const MyString& item);
 	int replace(int first, int last, const MyString& oldString, const MyString& newString);
+	MyString* split(int& count, char c = ' ');
+	MyString* split(const MyString& splits, int& count);
 	static MyString concate(const MyString& s1, const MyString& s2);
 	static MyString concate(MyString* arr, int count);
+	static MyString join(MyString* arr, int count, char c = ' ');
 };

@@ -147,19 +147,17 @@
 #include "MyDate.h"
 
 int main() {
-	MyString str1, str2, str3;
+	MyString str1, str2;
+	int x = 0;
+
 	str1.input();
 	str2.input();
-	str3.input();
-	MyString* arr = new MyString[3];
 
-	arr[0] = str1;
-	arr[1] = str2;
-	arr[2] = str3;
+	MyString* arr = str1.split(str2, x);
 
-	MyString str4 = MyString::concate(arr, 3);
-
-	str4.output();
+	for (int i = 0; i < x; i++) {
+		arr[i].output();
+	}
 
 	return 0;
 }
