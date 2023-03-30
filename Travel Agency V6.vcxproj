@@ -132,12 +132,14 @@
     <ClCompile Include="MyDate.cpp" />
     <ClCompile Include="MyString.cpp" />
     <ClCompile Include="Table.cpp" />
+    <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h" />
     <ClInclude Include="MyDate.h" />
     <ClInclude Include="MyString.h" />
     <ClInclude Include="Table.h" />
+    <ClInclude Include="Vector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
