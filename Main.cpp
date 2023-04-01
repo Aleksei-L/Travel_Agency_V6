@@ -143,21 +143,15 @@
 //	}
 //}
 
-#include "MyString.h"
-#include "MyDate.h"
+#include "Client.h"
 
 int main() {
-	MyString str1, str2;
-	int x = 0;
+	Client one;
 
-	str1.input();
-	str2.input();
-
-	MyString* arr = str1.split(str2, x);
-
-	for (int i = 0; i < x; i++) {
-		arr[i].output();
-	}
+	one.input();
+	one.output();
+	one.input();
+	one.output();
 
 	return 0;
 }

@@ -1,15 +1,18 @@
 #pragma once
 #include <iostream>
+#include "MyString.h"
+#include "MyDate.h"
 
 class Client {
 private:
-	char* name; // Имя клиента
-	char city[30]; // Адрес клиента
+	MyString name; // Имя клиента
+	MyString city; // Адрес клиента
 	int phone; // Телефон клиента
 	double age; // Возраст клиента
+	MyDate birth; // Дата рождения клиента
 public:
 	Client();
-	Client(const char* n, const char* c, int p, int a);
+	Client(const char* n, const char* c, int p, int a, int d, int m, int y);
 	Client(const Client& t);
 	void dispose();
 	~Client();

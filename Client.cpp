@@ -3,40 +3,20 @@
 
 // Конструктор клиента по умолчанию
 Client::Client() {
-	name = new char[1];
-	name[0] = '\0';
-	city[0] = '\0';
 	phone = 0;
 	age = 0.0;
 }
 
 // Конструктор клиента с заданными параметрами полей
-Client::Client(const char* n, const char* c, int p, int a) {
-	name = new char[strlen(n) + 1];
-	strcpy_s(name, strlen(n) + 1, n);
-
-	strcpy_s(city, 30, c);
-
-	phone = p;
-
-	age = a;
+Client::Client(const char* n, const char* c, int p, int a, int d, int m, int y) :name(n), city(c), phone(p), age(a), birth(d, m, y) {
 }
 
 // Конструктор копирования
-Client::Client(const Client& t) {
-	name = new char[strlen(t.name) + 1];
-	strcpy_s(name, strlen(t.name) + 1, t.name);
-
-	strcpy_s(city, 30, t.city);
-
-	phone = t.phone;
-
-	age = t.age;
+Client::Client(const Client& t) : name(t.name), city(t.city), phone(t.phone), age(t.age), birth(t.birth) {
 }
 
 // Освобождение памяти из-под клиента
 void Client::dispose() {
-	delete[] name;
 }
 
 // Деструктор клиента
@@ -46,21 +26,11 @@ Client::~Client() {
 
 // Ввод информации про клиента
 int Client::input() {
-	char buf[256];
-
 	std::cout << "Enter client name: ";
-	std::cin.getline(buf, 254, '\n');
-	if (strlen(buf) == 0)
-		std::cin.getline(buf, 254, '\n');
-	delete[] name;
-	name = new char[strlen(buf) + 1];
-	strcpy_s(name, strlen(buf) + 1, buf);
+	name.input();
 
 	std::cout << "Enter city: ";
-	std::cin.getline(city, 28, '\n');
-
-	if (strlen(buf) == 0)
-		std::cin.getline(city, 28, '\n');
+	city.input();
 
 	std::cout << "Enter phone: ";
 	std::cin >> phone;
@@ -68,34 +38,43 @@ int Client::input() {
 	std::cout << "Enter age: ";
 	std::cin >> age;
 
+	std::cout << "Enter birth's day, month and year: ";
+	birth.input();
+
 	return !std::cin.eof();
 }
 
 // Вывод информации про клиента
 void Client::output() {
-	std::cout << "Client name: " << name << std::endl;
-	std::cout << "City: " << city << std::endl;
+	std::cout << "Client name: ";
+	name.output();
+	std::cout << "City: ";
+	city.output();
 	std::cout << "Phone: " << phone << std::endl;
 	std::cout << "Age: " << age << std::endl;
+	std::cout << "Birth day:";
+	birth.output();
 }
 
 // Разница между клиентами
 int Client::cmp(const Client& b) {
 	int cond;
-	if ((cond = strcmp(name, b.name)) != 0)
+	if ((cond = name.cmp(b.name)) != 0)
 		return cond;
-	else if ((cond = strcmp(city, b.city)) != 0)
+	else if ((cond = city.cmp(b.city)) != 0)
 		return cond;
 	else if ((cond = phone - b.phone) != 0)
 		return cond;
 	else if ((cond = age - b.age) != 0)
+		return cond;
+	else if ((cond = birth.cmp(b.birth)))
 		return cond;
 	return 0;
 }
 
 // Проверка клиентов на равенство
 int Client::equal(const Client& t) {
-	return !strcmp(name, t.name) && !strcmp(city, t.city) && (phone == t.phone) && (age == t.age);
+	return !name.cmp(t.name) && !city.cmp(t.city) && (phone == t.phone) && (age == t.age) && !birth.cmp(t.birth);
 }
 
 // Создание копии объекта в динамической памяти

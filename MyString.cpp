@@ -13,7 +13,7 @@ MyString::MyString() {
 }
 
 // Конструктор от строки
-MyString::MyString(char* t) {
+MyString::MyString(const char* t) {
 	s = new char[MAX_SIZE + strlen(t)];
 	*s = '\0';
 	strcpy_s(s, strlen(t) + 1, t);

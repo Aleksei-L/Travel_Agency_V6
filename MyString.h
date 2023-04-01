@@ -11,7 +11,7 @@ private:
 public:
 	MyString();
 	MyString(const MyString& t);
-	MyString(char* t);
+	MyString(const char* t);
 	~MyString();
 	int length();
 	int length() const;
