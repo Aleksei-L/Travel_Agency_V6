@@ -134,6 +134,7 @@ int MyString::find(int first, int last, const MyString& item) {
 	/*
 	fisrt, last - отражают ЧЕЛОВЕЧЕСКИЙ номер
 	Ищет с позиции first по позицию last включительно
+	Возвращает КОМПЬЮТЕРНЫЙ номер
 	*/
 
 	// Проверка first и last на правильность, а строки-аргумента на существование
@@ -171,10 +172,10 @@ MyString MyString::substring(int pos, int count) {
 	*/
 
 	MyString newString;
-	char* buf = new char[5256];
+	char* buf = new char[MAX_SIZE];
 
 	// Проверка pos и count на правильность
-	if (pos <= 0 || pos > realSize() /*|| count > realSize() - pos - 1*/) {
+	if (pos <= 0 || pos > realSize() || count > realSize() - pos + 1) {
 		std::cout << "Error in substring function, class MyString" << std::endl;
 		return newString; // Возврат пустой строки
 	}
@@ -186,9 +187,9 @@ MyString MyString::substring(int pos, int count) {
 	}
 	buf[index] = '\0';
 
-	MyString newString2(buf);
+	newString.assign(buf);
 
-	return newString2;
+	return newString;
 }
 
 // Удаление символов из строки
@@ -201,14 +202,8 @@ int MyString::erase(int pos, int count) {
 	count - число символов, которое будет стёрто
 	*/
 
-	// Проверка pos на правильность
-	if (pos <= 0 || pos > realSize()) {
-		std::cout << "Error in erase function, class MyString" << std::endl;
-		return -1;
-	}
-
-	// Проверка count на правильность
-	if (count < 0 || count > realSize()) {
+	// Проверка pos и count на правильность
+	if (pos <= 0 || pos > realSize() || count < 0 || count > realSize()) {
 		std::cout << "Error in erase function, class MyString" << std::endl;
 		return -1;
 	}
@@ -235,38 +230,28 @@ int MyString::insert(int pos, const MyString& item) {
 	pos = len + 1 -> вставка в самый конец строки, ничего не сдвигается
 	*/
 
-	// Проверка pos на правильность
-	if (pos <= 0 || pos > len + 1) {
+	// Проверка pos на правильность, а строки-аргумента на существование
+	if (pos <= 0 || pos > len + 1 || item.realSize() == 0) {
 		std::cout << "Error in insert function, class MyString" << std::endl;
 		return -1;
 	}
 
-	char* newString = new char[len + item.len + 1];
-
-	// Копирование элементов до позиции вставки
-	for (int i = 0; i < pos - 1; i++)
-		newString[i] = s[i];
-
-	// Копирование новой строки
-	int count = 0;
-	for (int i = pos - 1; item.s[i - pos + 1] != '\0'; i++) {
-		newString[i] = item.s[i - pos + 1];
-		count++;
-	}
-
-	// Копирование элементов после позици вставки
-	for (int i = pos - 1 + count; i < realSize() + count; i++)
-		newString[i] = s[i - count];
-
-	//TODO переделать на нормальный вид
 	int len1 = realSize();
 	int len2 = item.realSize();
 
-	len = len + item.len + 1;
-	delete[] s;
-	s = newString;
-	cur = s + len1 + len2;
-	*cur = '\0';
+	// Проверка на наличие места для вставки в строке
+	if (len1 + len2 + 1 > len)
+		resize(len + item.len);
+
+	// Вставка текста
+	for (int i = len1 + len2; i != pos - 1; i--) {
+		s[i] = s[i - len2];
+	}
+	for (int i = 0; i < len2; i++) {
+		s[pos - 1 + i] = item.s[i];
+	}
+
+	cur = &s[len1 + len2];
 
 	return 0;
 }
@@ -286,13 +271,20 @@ int MyString::remove(int first, int last, const MyString& item) {
 
 	int index = find(first, last, item);
 
-	if (index != -1) {
-		int oldSize = realSize();
-		for (int i = 0; i < item.realSize(); i++) {
+	int len1 = realSize();
+	int len2 = item.realSize();
+
+	while (index != -1) {
+		for (int i = 0; i < len2; i++) {
 			for (int j = index; s[j] != '\0'; j++)
 				s[j] = s[j + 1];
 			cur--;
+			len1--;
 		}
+		if (len1 > len2)
+			index = find(len1 - len2, len1, item);
+		else
+			index = -1;
 	}
 
 	return 0;
@@ -305,7 +297,7 @@ int MyString::replace(int first, int last, const MyString& oldString, const MySt
 	Ищет для замены с позиции first по позицию last включительно
 	*/
 
-	// Проверка first и last на правильность, а строки-аргумента на существование
+	// Проверка first и last на правильность, а строк-аргументов на существование
 	if (first <= 0 || first > realSize() || last <= 0 || last > realSize() || first > last || oldString.realSize() == 0 || newString.realSize() == 0) {
 		std::cout << "Error in replace function, class MyString" << std::endl;
 		return -1;
@@ -313,9 +305,19 @@ int MyString::replace(int first, int last, const MyString& oldString, const MySt
 
 	int index = find(first, last, oldString);
 
-	if (index != -1) {
+	int len1 = realSize();
+	int len2 = newString.realSize();
+	int shift = len2 - oldString.realSize();
+
+	while (index != -1) {
+		// Проверка на достаточность свободного места
+		if (len - len1 - 1 < len2) {
+			resize(len + len2);
+			len1 = realSize();
+		}
 		remove(first, last, oldString);
 		insert(index + 1, newString);
+		index = find(first, last + shift, oldString);
 	}
 
 	return 0;
@@ -333,21 +335,26 @@ MyString* MyString::split(int& count, char c) {
 	MyString* arr = new MyString[count];
 	int index = 0, arrIndex = 0;
 
-	for (int i = 0; i < count; i++) {
-		MyString temp;
-		for (int j = index; s[j] != c && s[j] != '\0'; j++) {
-			char* t = new char[2];
-			t[0] = s[j];
-			t[1] = '\0';
-			MyString myChar(t);
-			temp.insert(temp.realSize() + 1, myChar);
-			delete[] t;
-			index = j;
+	char* buf = new char[len];
+	char* cur = &buf[0];
+
+	for (int i = 0; s[i] != '\0'; i++) {
+		if (s[i] == c) {
+			*cur = '\0';
+			strcpy(arr[arrIndex].s, buf);
+			arr[arrIndex].cur = &arr[arrIndex].s[strlen(buf)];
+			arrIndex++;
+			cur = &buf[0];
+			continue;
 		}
-		index += 2;
-		arr[arrIndex].assign(temp);
-		arrIndex++;
+		*cur = s[i];
+		cur++;
 	}
+	*cur = '\0';
+	strcpy(arr[arrIndex].s, buf);
+	arr[arrIndex].cur = &arr[arrIndex].s[strlen(buf)];
+
+	delete[] buf;
 
 	return arr;
 }
@@ -403,7 +410,12 @@ MyString* MyString::split(const MyString& splits, int& count) {
 // Соединение двух строк
 MyString MyString::concate(const MyString& s1, const MyString& s2) {
 	MyString my(s1);
-	my.insert(s1.realSize() + 1, s2);
+	int len1 = s1.realSize();
+	int len2 = s2.realSize();
+	for (int i = 0; i <= len2; i++)
+		my.s[len1 + i] = s2.s[i];
+
+	my.cur = &my.s[len1 + len2];
 	return my;
 }
 
@@ -411,22 +423,33 @@ MyString MyString::concate(const MyString& s1, const MyString& s2) {
 MyString MyString::concate(MyString* arr, int count) {
 	MyString res;
 
-	for (int i = 0; i < count; i++)
-		res.insert(res.realSize() + 1, arr[i]);
+	for (int i = 0; i < count; i++) {
+		int len1 = res.realSize();
+		int len2 = arr[i].realSize();
+		for (int j = 0; j <= len2; j++)
+			res.s[len1 + j] = arr[i].s[j];
+		res.cur += len2;
+	}
 
 	return res;
 }
 
 // Соединение массива строк со вставкой символа разделителя
 MyString MyString::join(MyString* arr, int count, char c) {
-	char* spl = new char[2];
-	spl[0] = c;
-	spl[1] = '\0';
-	MyString res, split(spl);
+	MyString res;
 
 	for (int i = 0; i < count; i++) {
-		res.insert(res.realSize() + 1, arr[i]);
-		res.insert(res.realSize() + 1, split);
+		int len1 = res.realSize();
+		int len2 = arr[i].realSize();
+		for (int j = 0; j <= len2; j++)
+			res.s[len1 + j] = arr[i].s[j];
+		if (i != count - 1) {
+			res.s[len1 + len2] = c;
+			res.s[len1 + len2 + 1] = '\0';
+			res.cur += len2 + 1;
+		}
+		else
+			res.cur += len2;
 	}
 
 	return res;
