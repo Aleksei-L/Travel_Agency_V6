@@ -171,13 +171,12 @@ MyString MyString::substring(int pos, int count) {
 	pos = len + 1 -> недопустимо
 	*/
 
-	MyString newString;
-	char* buf = new char[MAX_SIZE];
+	char buf[MAX_SIZE];
 
 	// Проверка pos и count на правильность
 	if (pos <= 0 || pos > realSize() || count > realSize() - pos + 1) {
 		std::cout << "Error in substring function, class MyString" << std::endl;
-		return newString; // Возврат пустой строки
+		return MyString();
 	}
 
 	int index = 0;
@@ -187,9 +186,7 @@ MyString MyString::substring(int pos, int count) {
 	}
 	buf[index] = '\0';
 
-	newString.assign(buf);
-
-	return newString;
+	return MyString(buf);
 }
 
 // Удаление символов из строки
@@ -208,13 +205,8 @@ int MyString::erase(int pos, int count) {
 		return -1;
 	}
 
-	char sym = s[pos - 1];
-	int shift = 0;
-	while (sym != '\0') {
-		s[pos - 1 + shift] = s[pos - 1 + count + shift];
-		shift++;
-		sym = s[pos - 1 + shift];
-	}
+	for (int i = pos - 1; s[i] != '\0'; i++)
+		s[i] = s[i + count];
 
 	cur -= count;
 
@@ -341,6 +333,8 @@ MyString* MyString::split(int& count, char c) {
 	for (int i = 0; s[i] != '\0'; i++) {
 		if (s[i] == c) {
 			*cur = '\0';
+			if (len < strlen(arr[arrIndex].s))
+				arr[arrIndex].resize(len);
 			strcpy(arr[arrIndex].s, buf);
 			arr[arrIndex].cur = &arr[arrIndex].s[strlen(buf)];
 			arrIndex++;
@@ -351,6 +345,8 @@ MyString* MyString::split(int& count, char c) {
 		cur++;
 	}
 	*cur = '\0';
+	if (len < strlen(arr[arrIndex].s))
+		arr[arrIndex].resize(len);
 	strcpy(arr[arrIndex].s, buf);
 	arr[arrIndex].cur = &arr[arrIndex].s[strlen(buf)];
 
@@ -388,21 +384,28 @@ MyString* MyString::split(const MyString& splits, int& count) {
 	MyString* arr = new MyString[count];
 	int index = 0, arrIndex = 0;
 
-	for (int i = 0; i < count; i++) {
-		MyString temp;
-		for (int j = index; copy.s[j] != ' ' && copy.s[j] != '\0'; j++) {
-			char* t = new char[2];
-			t[0] = copy.s[j];
-			t[1] = '\0';
-			MyString myChar(t);
-			temp.insert(temp.realSize() + 1, myChar);
-			delete[] t;
-			index = j;
+	char* buf = new char[len];
+	char* cur = &buf[0];
+
+	for (int i = 0; copy.s[i] != '\0'; i++) {
+		if (copy.s[i] == ' ') {
+			*cur = '\0';
+			if (len < strlen(arr[arrIndex].s))
+				arr[arrIndex].resize(len);
+			strcpy(arr[arrIndex].s, buf);
+			arr[arrIndex].cur = &arr[arrIndex].s[strlen(buf)];
+			arrIndex++;
+			cur = &buf[0];
+			continue;
 		}
-		index += 2;
-		arr[arrIndex].assign(temp);
-		arrIndex++;
+		*cur = copy.s[i];
+		cur++;
 	}
+	*cur = '\0';
+	if (len < strlen(arr[arrIndex].s))
+		arr[arrIndex].resize(len);
+	strcpy(arr[arrIndex].s, buf);
+	arr[arrIndex].cur = &arr[arrIndex].s[strlen(buf)];
 
 	return arr;
 }
